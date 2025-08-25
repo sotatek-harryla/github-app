@@ -52,10 +52,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ needs.initialize.outputs.IMAGE }} .
-
-      - name: Push Docker image
-        run: |
-          docker push ${{ needs.initialize.outputs.IMAGE }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ needs.initialize.outputs.IMAGE }}
