@@ -27,7 +27,7 @@ jobs:
           TARGET_BRANCH="${{ github.event.pull_request.base.ref || github.ref_name }}"
           BRANCH="${TARGET_BRANCH#deployment/}"
           SHA="${GITHUB_SHA::7}"
-          IMAGE="ghcr.io/${REPO}-${BRANCH}:${SHA}"
+          IMAGE="ghcr.io/${REPO}:${BRANCH}-${SHA}"
           STACK_NAME="${REPO_NAME}-${BRANCH}"
           
           echo "IMAGE=$IMAGE" >> $GITHUB_OUTPUT
