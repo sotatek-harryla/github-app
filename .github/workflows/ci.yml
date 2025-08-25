@@ -17,7 +17,7 @@ jobs:
   initialize:
     name: Setup runner environment
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
-    runs-on: [ self-hosted, runner ]
+    runs-on: picasodocs
     steps:
       - name: Set image name and tag
         id: vars
@@ -37,7 +37,9 @@ jobs:
       STACK_NAME: ${{ steps.vars.outputs.STACK_NAME }}
     
   build:
+    name: "Build image"
     runs-on: picasodocs
+    needs: initialize
 
     steps:
       - name: Checkout source code
