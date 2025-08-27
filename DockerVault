@@ -1,0 +1,20 @@
+# Stage 1: download vault
+FROM alpine:3.20 AS builder
+
+ARG VAULT_VERSION=1.20.1
+
+RUN apk add --no-cache curl unzip ca-certificates \
+ && curl -fsSL https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip \
+    -o /tmp/vault.zip \
+ && unzip /tmp/vault.zip -d /tmp \
+ && rm /tmp/vault.zip
+
+# Stage 2: minimal runtime
+FROM scratch
+
+# copy vault binary + CA certs
+COPY --from=builder /tmp/vault /usr/local/bin/vault
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+ENTRYPOINT ["/usr/local/bin/vault"]
+CMD ["--help"]
